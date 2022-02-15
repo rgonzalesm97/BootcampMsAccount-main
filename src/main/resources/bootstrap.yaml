@@ -1,5 +1,9 @@
-#Database
 spring:
-  data:
-    mongodb:
-      uri: mongodb+srv://rgonzalesm97:JFhtRLmWRJfS2eMA@micluster.tqgdj.mongodb.net/BootcampP2Bank?retryWrites=true&w=majority
+  application:
+    name: account
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8888
+      username: nttdata
+      password: nttd4t4
