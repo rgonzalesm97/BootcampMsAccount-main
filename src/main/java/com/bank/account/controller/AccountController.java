@@ -26,7 +26,7 @@ public class AccountController {
 
     @PostMapping
     Mono<Account> postAccount(@RequestBody Account account){
-        return service.save(account);
+        return service.save(account).switchIfEmpty(Mono.just(new Account()));
     }
 
     @PutMapping

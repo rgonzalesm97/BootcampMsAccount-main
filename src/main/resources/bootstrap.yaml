@@ -1,6 +1,8 @@
 spring:
   application:
     name: account
+#  config:
+#    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:8888/}
   cloud:
     config:
       enabled: true
