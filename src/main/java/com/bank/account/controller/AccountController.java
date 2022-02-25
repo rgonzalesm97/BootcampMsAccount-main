@@ -31,7 +31,7 @@ public class AccountController {
 
     @PutMapping
     Mono<Account> updAccount(@RequestBody Account account){
-        return service.update(account);
+        return service.save(account);
     }
 
     @DeleteMapping("/{id}")

@@ -10,10 +10,10 @@ public interface IAccountService {
     Flux<Account> getAll();
 
     Mono<Account> getAccountById(String id);
+    
+    Mono<Account> getAccountByIdClientAndTypeAccount(String idClient, String typeAccount);
 
     Mono<Account> save(Account account);
-
-    Mono<Account> update(Account account);
 
     void delete(String id);
 
