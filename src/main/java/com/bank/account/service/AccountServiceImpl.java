@@ -42,30 +42,6 @@ public class AccountServiceImpl implements IAccountService{
 			return Mono.error(() -> new IllegalArgumentException("Invalid Account type"));
 		}
     	
-
-//    	Mono<Client> client = accountProxy.getClient(account.getIdClient());
-//    	
-//    	return client.flatMap(x -> {
-//    		if(x.getType().equals("personal")) {
-//    			
-//    			return repository.findByIdClientAndTypeAccount(account.getIdClient(), account.getTypeAccount())
-//								.switchIfEmpty(Mono.just(new Account()))
-//								.flatMap(y -> {
-//									if(y.getId()!=null) {
-//										return Mono.empty();
-//									}
-//									return repository.save(account);
-//								});
-//    			
-//    		}else if(x.getType().equals("business")) {
-//    			if(account.getTypeAccount().equals("cuenta corriente")) {
-//    				return repository.save(account);
-//    			}
-//    			return Mono.empty();
-//    		}
-//    		return Mono.empty();
-//    	});
-    	
     }
 
     @Override
