@@ -23,6 +23,11 @@ public class AccountController {
     public Mono<Account> getAccountById(@PathVariable("id") String id){
         return service.getAccountById(id);
     }
+    
+    @GetMapping("/byClient/{id}")
+    public Flux<Account> getByIdClient(@PathVariable("id") String idClient){
+        return service.getAllByIdClient(idClient);
+    }
 
     @PostMapping
     Mono<Account> postAccount(@RequestBody Account account){

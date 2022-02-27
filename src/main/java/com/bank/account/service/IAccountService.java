@@ -8,6 +8,8 @@ import reactor.core.publisher.Mono;
 public interface IAccountService {
 
     Flux<Account> getAll();
+    
+    Flux<Account> getAllByIdClient(String idClient);
 
     Mono<Account> getAccountById(String id);
     

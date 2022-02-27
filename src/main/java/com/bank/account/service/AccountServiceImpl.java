@@ -27,6 +27,11 @@ public class AccountServiceImpl implements IAccountService{
     public Mono<Account> getAccountById(String id) {
         return repository.findById(id);
     }
+    
+    @Override
+    public Flux<Account> getAllByIdClient(String idClient) {
+    	return repository.findAllByIdClient(idClient);
+    }
 
     @Override
     public Mono<Account> save(Account account) {
@@ -115,6 +120,7 @@ public class AccountServiceImpl implements IAccountService{
 					return Mono.error(()->new IllegalArgumentException("Client has a this account type already"));
 		});
 	}
+
 
 	
 }
