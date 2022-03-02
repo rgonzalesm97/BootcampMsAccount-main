@@ -4,23 +4,25 @@ import com.bank.account.entity.Account;
 import com.bank.account.proxy.AccountProxy;
 import com.bank.account.repository.IAccountRepository;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import com.bank.account.model.Client;
 import com.bank.account.model.DebitCard;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class AccountServiceImpl implements IAccountService{
 
     
     private final IAccountRepository repository;
     
-    private final AccountProxy accountProxy;
+    private final AccountProxy accountProxy = new AccountProxy();
 
     @Override
     public Flux<Account> getAll() {

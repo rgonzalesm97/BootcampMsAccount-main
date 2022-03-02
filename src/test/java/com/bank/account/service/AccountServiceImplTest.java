@@ -32,7 +32,7 @@ public class AccountServiceImplTest {
 	public static void setUp() {
 		accountRepo = mock(IAccountRepository.class);
 		proxy = mock(AccountProxy.class);
-		service = new AccountServiceImpl(accountRepo, proxy);
+		//service = new AccountServiceImpl(accountRepo, proxy);
 	}
 		
 	@Test
