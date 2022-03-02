@@ -1,18 +1,20 @@
 package com.bank.account.controller;
 
 import com.bank.account.entity.Account;
-import com.bank.account.service.IAccountService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.bank.account.service.AccountServiceImpl;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/account")
 public class AccountController {
 
-    @Autowired
-    IAccountService service;
+    private final AccountServiceImpl service;
 
     @GetMapping
     public Flux<Account> getAccounts(){
@@ -31,7 +33,13 @@ public class AccountController {
 
     @PostMapping
     Mono<Account> postAccount(@RequestBody Account account){
-        return service.save(account).switchIfEmpty(Mono.just(new Account()));
+        return service.save(account);
+    }
+    
+    @PostMapping("/associate-card/{idAccount}/{idCard}")
+    Mono<Account> associateCard(@PathVariable("idAccount") String idAccount,
+    							@PathVariable("idCard") String idCard){
+        return service.associateWithCard(idAccount, idCard);
     }
 
     @PutMapping

@@ -3,20 +3,24 @@ package com.bank.account.service;
 import com.bank.account.entity.Account;
 import com.bank.account.proxy.AccountProxy;
 import com.bank.account.repository.IAccountRepository;
-import com.bank.account.model.Client;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+
+import com.bank.account.model.Client;
+import com.bank.account.model.DebitCard;
+
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
+@RequiredArgsConstructor
 public class AccountServiceImpl implements IAccountService{
 
-    @Autowired
-    IAccountRepository repository;
     
-    private AccountProxy accountProxy = new AccountProxy();
+    private final IAccountRepository repository;
+    
+    private final AccountProxy accountProxy;
 
     @Override
     public Flux<Account> getAll() {
@@ -58,6 +62,12 @@ public class AccountServiceImpl implements IAccountService{
 	public Mono<Account> getAccountByIdClientAndTypeAccount(String idClient, String typeAccount) {
 		return repository.findByIdClientAndTypeAccount(idClient, typeAccount);
 	}
+    
+    @Override
+    public Mono<Account> associateWithCard(String idAccount, String idCard){
+    	return getAccountById(idAccount).flatMap(resp->putCardIntoAccount(resp, idCard))
+    									.flatMap(this::save);
+    }
     
     //PRODUCT VALIDATION METHODS
     public Mono<Account> createCuentaAhorro(Account account){
@@ -110,6 +120,10 @@ public class AccountServiceImpl implements IAccountService{
 		return accountProxy.getClient(account.getIdClient());
 	}
 	
+	public Mono<DebitCard> getDebitCard(String idDebitCard){
+		return accountProxy.getDebitCard(idDebitCard);
+	}
+	
 	public Mono<Account> clientHasAccountAlready(Account account){
 		return getAccountByIdClientAndTypeAccount(account.getIdClient(), account.getTypeAccount())
 				.switchIfEmpty(Mono.just(new Account()))
@@ -120,7 +134,24 @@ public class AccountServiceImpl implements IAccountService{
 					return Mono.error(()->new IllegalArgumentException("Client has a this account type already"));
 		});
 	}
+	
+	public Mono<Account> putCardIntoAccount(Account account, String idCard){
+		return cardExist(idCard).flatMap(resp->{
+									if(resp.getIdClient().equals(account.getIdClient())) {
+										account.setIdCard(idCard);
+										return Mono.just(account);
+									}else {
+										return Mono.error(()->new IllegalArgumentException("This client is not the owner of this debit card"));
+									}
+								});
+	}
 
-
+	public Mono<DebitCard> cardExist(String idCard){
+		return accountProxy.getDebitCard(idCard).switchIfEmpty(Mono.just(new DebitCard()))
+													   .flatMap(resp -> {
+														   return resp.getId()==null ? Mono.error(()->new IllegalArgumentException("Credit card doesn't exist"))
+																   					 : Mono.just(resp);
+													   });
+	}
 	
 }

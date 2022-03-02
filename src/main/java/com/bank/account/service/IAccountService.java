@@ -10,6 +10,8 @@ public interface IAccountService {
     Flux<Account> getAll();
     
     Flux<Account> getAllByIdClient(String idClient);
+    
+    Mono<Account> associateWithCard(String idAccount, String idCard);
 
     Mono<Account> getAccountById(String id);
     
